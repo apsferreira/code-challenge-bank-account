@@ -9,5 +9,5 @@ if [[ "$args" =~ "--prod" ]]; then
 else
   docker build -t $containerRepositoryName:latest --build-arg bundle_options_var='--without staging production' .
 fi
+
 docker-compose up
-docker-compose run -e "RAILS_ENV=test" web bundle exec rspec spec
