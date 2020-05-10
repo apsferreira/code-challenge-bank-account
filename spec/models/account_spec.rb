@@ -81,7 +81,7 @@ RSpec.describe Account, type: :model do
     context  'As long as all data has not been properly informed and validated, the account will remain in a pending status' do
       
       it 'status pending for missing data' do
-        account = build(:account, name: nil)
+        account = build(:account, name: nil, cpf: '80273497022')
 
         Account.create(account)
 
@@ -89,7 +89,7 @@ RSpec.describe Account, type: :model do
       end
 
       it 'status completed for all completed data' do
-        account = build(:account)
+        account = build(:account, cpf: '80273497022')
 
         Account.create(account)
         
@@ -101,7 +101,7 @@ RSpec.describe Account, type: :model do
   describe ' #Encript name, email, cpf and birth_date if informed' do
     context 'Encript valid informations' do
       it 'a valid cpf after encript' do
-        build(:account, cpf: '98088065038')
+        account = build(:account, cpf: '98088065038')
         
         Account.create(account)
 
@@ -121,7 +121,7 @@ RSpec.describe Account, type: :model do
 
         Account.create(account)
 
-        expect(account.email('teste@teste.comm')).to_not eq('teste@teste.comm')
+        expect(account.email).to_not eq('teste@teste.comm')
       end
 
       it 'a birth_date and a valid cpf after encript' do
@@ -129,7 +129,7 @@ RSpec.describe Account, type: :model do
 
         Account.create(account)
         
-        expect(Account.find(account.id).birth_date).to_not eq('10/10/2012')
+        expect(account.birth_date).to_not eq('10/10/2012')
       end
     end
   end 

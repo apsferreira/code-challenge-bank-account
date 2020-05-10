@@ -9,7 +9,9 @@ class Account < ApplicationRecord
 	def self.create(account)
 		logger.info "processing the request #{Crypt.decrypt(account.cpf)}"
 
-		return create_or_update(account) if validate(account)
+		if validate(account)
+			return create_or_update(account)
+		end
 
 		logger.error "error request is invalid"
 		false
@@ -117,10 +119,10 @@ class Account < ApplicationRecord
 			Account.upsert({
 				name: 			account.name,
 				email:  		account.email,
-				birth_date:	account.birth_date,
-				cpf:				account.cpf,
+				birth_date:		account.birth_date,
+				cpf:			account.cpf,
 				gender: 		account.gender,
-				city:				account.city,
+				city:			account.city,
 				state:			account.state,
 				country:		account.country
 			}, unique_by: :cpf)
