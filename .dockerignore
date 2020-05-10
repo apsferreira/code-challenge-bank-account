@@ -1,0 +1,24 @@
+.DS_Store
+.git
+.dockerignore
+
+# Ignore logfiles
+/log/*
+!/log/.keep
+
+# Ignore tempfiles
+/tmp/*
+!/tmp/.keep
+
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
+
+# Ignore byebug history
+.byebug_history
+
+# Ignore auxiliar files
+rspec.sh
+run.sh
+up.sh
+
