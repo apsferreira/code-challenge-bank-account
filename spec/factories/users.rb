@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     username { Faker::Alphanumeric.alphanumeric(number: 6) }
     password_digest { Faker::Alphanumeric.alphanumeric(number: 6) }

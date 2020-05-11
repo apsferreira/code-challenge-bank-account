@@ -7,7 +7,5 @@ cache: bundler
 services:
     - postgresql
 before_script:
-    - bundle exec rails db:create
-    - bundle exec rails db:migrate
-    - bundle exec rails db:seed
+    - bundle exec rails db:create db:migrate db:seed --trace
 script: bundle exec rspec spec

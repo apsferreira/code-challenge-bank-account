@@ -14,7 +14,7 @@ RSpec.describe Account, type: :model do
     # it { should validate_length_of(:email).is_at_least(10) }
     # it { should allow_value('teste@teste.com').for(:email) }
   end 
-
+ 
   describe '#Account' do
     context "is valid" do
       it 'has a valid Account' do 
@@ -106,7 +106,7 @@ RSpec.describe Account, type: :model do
         Account.create(account)
 
         expect(account.cpf).to_not eq('98088065038')
-      end
+      end 
 
       it 'a name and a valid cpf after encript' do
         account = build(:account, name: 'ok', cpf: '98088065038')
@@ -121,7 +121,7 @@ RSpec.describe Account, type: :model do
 
         Account.create(account)
 
-        expect(account.email).to_not eq('teste@teste.comm')
+        expect(account.email).to_not eq('test@test.com')
       end
 
       it 'a birth_date and a valid cpf after encript' do

@@ -1,50 +1,62 @@
-module Api
-  module V1
-    class AccountsController < ApplicationController
-      before_action :authorize_request, except: %i[create, index]
-      
-      # GET /accounts
-      def index
-        @accounts = Account.all
-        render json: @accounts, status: :ok
-      end
-
-      # GET /accounts/{id}
-      def show
-        render json: @account, status: :ok
-      end
-
-      # POST /accounts
-      def create
-        @account = Account.new(account_params)
-        if @account.save
-          render json: @account, status: :created
+module Api::V1
+  class AccountsController < ApplicationController
+    include Response
+    include ExceptionHandler
+    before_action :authorize_request, except: %i[create, show]
+    
+    # GET /api/v1/accounts
+    def index
+      @accounts = 
+        if @current_user.is_admin
+          Account.all
         else
-          render json: { errors: @account.errors.full_messages },
-                status: :unprocessable_entity
+          Account.find(@current_user.id)
         end
-      end
 
-      # PUT /accounts/{id}
-      def update
-        unless @account.update(account_params)
-          render json: { errors: @user.errors.full_messages },
-                status: :unprocessable_entity
-        end
-      end
+      render json: @accounts, status: :ok
+    end
 
-      # DELETE /accounts/{id}
-      def destroy
-        @account.destroy
+    # GET /api/v1/accounts/{id}
+    def show
+      @account = Account.find(params[:id])
+      if @account
+        render json: @account, status: :ok
+      else
+        render json: @account, status: :not_found
       end
+    end
 
-      private
+    # POST /api/v1/accounts
+    def create
+      @account = Account.create(account_params)
+      json_response(@account,:created)
+    end
 
-      def account_params
-        params.permit(
-          :username, :email, :password, :password_confirmation
-        )
+    # PUT /api/v1/accounts/{id}
+    def update
+      @account = Account.new(account_params)
+
+      unless Account.create(@account)
+        render json: { errors: @account.errors.full_messages },
+              status: :unprocessable_entity 
       end
+    end
+
+    # DELETE /api/v1/accounts/{id}
+    def destroy
+      @account.destroy
+    end
+
+    private
+
+    def set_account
+      @set_account = Account.find(params[:id])
+    end
+
+    def account_params
+      params.require(:account).permit(
+        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country
+      )
     end
   end
 end

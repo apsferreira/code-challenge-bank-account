@@ -7,8 +7,8 @@ class Account < ApplicationRecord
 	attr_accessor :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :status
 	
 	def self.create(account)
-		logger.info "processing the request #{Crypt.decrypt(account.cpf)}"
-
+		logger.info "processing the request #{:cpf}"
+		
 		if validate(account)
 			return create_or_update(account)
 		end
@@ -20,7 +20,7 @@ class Account < ApplicationRecord
 	protected
 
 	def self.check_email(email)
-		if !email.blank? and email =~ /^[\w\d]+@[\w\d]+(\.[\w\d]+)+$/
+		if !email.blank? && email =~ /^[\w\d]+@[\w\d]+(\.[\w\d]+)+$/
 			true
 		else
 			false
@@ -59,9 +59,10 @@ class Account < ApplicationRecord
 	private 
 
 	def self.validate(account) 
-		logger.info "validating and crypt infos for #{Crypt.decrypt(account.cpf)} request"
+		logger.info "validating and crypt infos for } request"
 
-		if (account.valid? and check_cpf(account.cpf)) or Crypt.already_encrypted?(account.cpf)
+		# account.valid? && 
+		if check_cpf(account.cpf) || Crypt.already_encrypted?(account.cpf)
 			account.cpf = 
 				if !Crypt.already_encrypted?(account.cpf)
 					Crypt.encrypt(account.cpf)
@@ -97,9 +98,9 @@ class Account < ApplicationRecord
 				end
 			
 			account.status =  
-				if (account.name.blank? or check_email(account.email) \
-						or account.birth_date.blank? or account.gender.blank? \
-						or account.city.blank? or account.state.blank? or account.country.blank?) 
+				if (account.name.blank? || check_email(account.email) \
+						|| account.birth_date.blank? || account.gender.blank? \
+						|| account.city.blank? || account.state.blank? || account.country.blank?) 
 					'pending' 
 				else 
 					'completed' 
@@ -119,10 +120,10 @@ class Account < ApplicationRecord
 			Account.upsert({
 				name: 			account.name,
 				email:  		account.email,
-				birth_date:		account.birth_date,
-				cpf:			account.cpf,
+				birth_date:	account.birth_date,
+				cpf:				account.cpf,
 				gender: 		account.gender,
-				city:			account.city,
+				city:				account.city,
 				state:			account.state,
 				country:		account.country
 			}, unique_by: :cpf)

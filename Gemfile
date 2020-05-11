@@ -14,6 +14,8 @@ gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 
+# gem 'active_model_serializers'
+
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.0'
 
@@ -38,7 +40,7 @@ group :test do
   gem 'rspec-rails'
   gem 'guard-rspec', require: false
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'shoulda-matchers'
   gem 'webmock'

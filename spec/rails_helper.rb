@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 
@@ -11,6 +12,7 @@ end
 require 'spec_helper'
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'database_cleaner'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -39,26 +41,28 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  # add `FactoryGirl` methods
-  config.include FactoryGirl::Syntax::Methods
+  # add `FactoryBot` methods
+  config.include FactoryBot::Syntax::Methods
 
   config.use_transactional_fixtures = true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
-  # config.before(:suite) do
-  #   DatabaseCleaner.clean_with(:truncation)
-  #   DatabaseCleaner.strategy = :transaction
-  # end
+  # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
 
   # start the transaction strategy as examples are run
-  # config.around(:each) do |example|
-  #   DatabaseCleaner.cleaning do
-  #     example.run
-  #   end
-  # end
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
+  config.include RequestSpecHelper, type: :request
 
   config.infer_spec_type_from_file_location!
 
