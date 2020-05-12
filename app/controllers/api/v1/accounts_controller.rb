@@ -2,15 +2,17 @@ module Api::V1
   class AccountsController < ApplicationController
     include Response
     include ExceptionHandler
-    before_action :authorize_request, except: %i[create, show]
-    
+    before_action :authorize_request, except: %i[create show]
+
     # GET /api/v1/accounts
     def index
-      @accounts = 
+      @accounts =
         if @current_user.is_admin
+          logger.info "return all accounts"
           Account.all
         else
-          Account.find(@current_user.id)
+          logger.info "return an account"
+          Account.find_by_user_id(@current_user.id)
         end
 
       render json: @accounts, status: :ok
@@ -19,26 +21,27 @@ module Api::V1
     # GET /api/v1/accounts/{id}
     def show
       @account = Account.find(params[:id])
-      if @account
+      if @account && current_user.is_admin
+        logger.info "show an account"
         render json: @account, status: :ok
       else
-        render json: @account, status: :not_found
+        logger.info "not authorize"
+        render json: @account, status: :unauthorized
       end
     end
 
     # POST /api/v1/accounts
     def create
-      @account = Account.create(account_params)
-      json_response(@account,:created)
-    end
-
-    # PUT /api/v1/accounts/{id}
-    def update
+      logger.info "create or update an account"
       @account = Account.new(account_params)
-
-      unless Account.create(@account)
-        render json: { errors: @account.errors.full_messages },
-              status: :unprocessable_entity 
+      
+      if @account.valid?
+        logger.info "account is valid"
+        render json: Account.upsert(account_params, unique_by: :cpf), status: :created
+      else
+        logger.info "account is invalid"
+        render json: {errors: @account.errors.full_messages},
+               status: :unprocessable_entity
       end
     end
 
@@ -55,7 +58,7 @@ module Api::V1
 
     def account_params
       params.require(:account).permit(
-        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country
+        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :status
       )
     end
   end

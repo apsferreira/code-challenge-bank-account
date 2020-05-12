@@ -1,25 +1,25 @@
-require 'faker'
+require "faker"
 
-5.times  do
-	user = User.new
-	user.username = Faker::Name.name
-	user.password_digest = Faker::Alphanumeric.alphanumeric(number: 6)
-	user.indicated_referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
-	user.referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
-	user.is_admin = Faker::Boolean
-	
-	user.save
+5.times do
+  user = User.new
+  user.username = Faker::Name.name
+  user.password_digest = Faker::Alphanumeric.alphanumeric(number: 6)
+  user.indicated_referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
+  user.referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
+  user.is_admin = Faker::Boolean
 
-	account = Account.new
-	account.name = Faker::Name.name
-	account.email = Faker::Internet.email
-	account.birth_date = '20/10/2010'
-	account.cpf = Faker::Alphanumeric.alphanumeric(number: 11)
-	account.gender = Faker::Gender
-	account.city = Faker::Lorem.sentence
-	account.state = Faker::Lorem.sentence
-	account.country = Faker::Lorem.sentence
-	account.user_id = user.id
+  user.save
 
-	account.save
+  account = Account.new
+  account.name = Faker::Name.name
+  account.email = Faker::Internet.email
+  account.birth_date = "20/10/2010"
+  account.cpf = Faker::Alphanumeric.alphanumeric(number: 11)
+  account.gender = Faker::Gender
+  account.city = Faker::Lorem.sentence
+  account.state = Faker::Lorem.sentence
+  account.country = Faker::Lorem.sentence
+  account.user_id = user.id
+
+  account.save
 end

@@ -8,7 +8,7 @@
 # 			:birth_date => "20/10/2005",
 # 			:city => Faker::Lorem.sentence,
 # 			:state => Faker::Lorem.sentence,
-# 			:country => Faker::Lorem.sentence 
+# 			:country => Faker::Lorem.sentence
 # 		}
 # 	end
 # end
