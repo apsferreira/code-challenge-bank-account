@@ -1,5 +1,6 @@
 class Crypt
   def self.encrypt(value)
+    puts "encriptation of #{value}"
     Base64.encode64(value) if !value.blank? && !Crypt.already_encrypted?(value)
   end
 

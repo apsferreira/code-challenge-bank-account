@@ -37,7 +37,7 @@ module Api::V1
       
       if @account.valid?
         logger.info "account is valid"
-        render json: Account.upsert(account_params, unique_by: :cpf), status: :created
+        render json: @account.process, status: :created
       else
         logger.info "account is invalid"
         render json: {errors: @account.errors.full_messages},
