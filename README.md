@@ -4,23 +4,23 @@
 
 code challenge related to creating an API that supports requests for creating and editing accounts.
 
-The API documentation and testing can be done [here](http://docs.docker.com/compose/compose-file/#build)
+The API documentation and testing can be done [here](http://api.antoniopedro.com.br/api/v1/)
 
 ## Stack
 
 This project was built using the technologies and some gems below:
 
-- Ruby 2.7.1
-- Rails 6.0.22
-- AMS
-- Postgresql
-- Redis
-- Sidekiq
-- Docker
-- Docker-compose
-- Newrelic
-- JWT
-- rack-attack
+- [Ruby 2.7.1](https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/)
+- [Rails 6.0.2.2](https://edgeguides.rubyonrails.org/6_0_release_notes.html)
+- [AMS](https://github.com/rails-api/active_model_serializers)
+- [Postgresql](https://www.postgresql.org/docs/9.6/index.html)
+- [Redis](https://redis.io/)
+- [Sidekiq](https://sidekiq.org/)
+- [Docker](https://www.docker.com/)
+- [Docker-compose](https://docs.docker.com/compose/)
+- [Newrelic](https://newrelic.com/) (for monitoring)
+- [JWT](https://jwt.io/)
+- [rack-attack](https://github.com/kickstarter/rack-attack)
 
 ## Getting started
 
