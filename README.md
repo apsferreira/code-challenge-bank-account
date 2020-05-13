@@ -4,7 +4,7 @@
 
 Code challenge related to creating an API that supports requests for creating and editing accounts.
 
-The API documentation and testing can be done [here](http://api.antoniopedro.com.br/api/v1/)
+The API documentation and testing can be done [here](##)
 
 ## Stack
 
