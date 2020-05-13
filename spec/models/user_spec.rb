@@ -38,11 +38,6 @@ RSpec.describe User, type: :model do
         user = build(:user, referral_code: "2313")
         expect(user.save).to eq(false)
       end
-
-      # it 'invalid indicated_referral_code' do
-      #   user = build(:user, indicated_referral_code: '2313')
-      #   expect(user.save).to eq(false)
-      # end
     end
   end
 end

@@ -2,7 +2,7 @@ class Account < ApplicationRecord
   belongs_to :user, required: false
 	validates :cpf, presence: true, cpf: true
 	attr_accessor :name, :cpf, :email, :birth_date, :status, :gender, :city, :state, :country
-	
+
 	def process
 		logger.info "processing account creation"
 

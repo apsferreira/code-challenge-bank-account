@@ -10,4 +10,10 @@ class JsonWebToken
     decoded = JWT.decode(token, SECRET_KEY)[0]
     HashWithIndifferentAccess.new decoded
   end
+
+  def self.current_user(request)
+    header = request.headers["Authorization"]
+    header = header.split(" ").last if header
+    JsonWebToken.decode(header)
+  end
 end

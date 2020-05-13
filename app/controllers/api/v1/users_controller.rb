@@ -1,14 +1,24 @@
 module Api::V1
   class UsersController < ApplicationController
-    before_action :authorize_request, except: %i[create]
+    before_action :authorize_request, except: %i[create, index]
 
     # GET /api/v1/users
     def index
-      @users = if @current_user.is_admin
-                User.all
-              else
-                User.find_by_indicated_referral_code(@current_user.referral_code)
-              end
+
+      # header = request.headers["Authorization"]
+      # header = header.split(" ").last if header
+      # @decoded = JsonWebToken.decode(header)
+
+      @users = User.all 
+      
+    # if JsonWebToken.current_user(request)[:is_admin]
+    #   User.all
+    # else
+    #   User.all
+      # User.find_by_indicated_referral_code(JsonWebToken.current_user(request)[:referral_code])
+    # end
+
+      # logger.log @decoded[:referral_code]
 
       if !@users.blank?
         render json: @users, status: :ok

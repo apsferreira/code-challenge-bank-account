@@ -2,17 +2,17 @@ module Api::V1
   class AccountsController < ApplicationController
     include Response
     include ExceptionHandler
-    before_action :authorize_request, except: %i[create show]
+    before_action :authorize_request, except: %i[create index]
 
     # GET /api/v1/accounts
     def index
       @accounts =
-        if @current_user.is_admin
+        if JsonWebToken.current_user(request)[:is_admin]
           logger.info "return all accounts"
           Account.all
         else
           logger.info "return an account"
-          Account.find_by_user_id(@current_user.id)
+          Account.find_by_user_id(JsonWebToken.current_user(request)[:user_id])
         end
 
       render json: @accounts, status: :ok
@@ -21,7 +21,7 @@ module Api::V1
     # GET /api/v1/accounts/{id}
     def show
       @account = Account.find(params[:id])
-      if @account && current_user.is_admin
+      if @account && JsonWebToken.current_user(request).is_admin
         logger.info "show an account"
         render json: @account, status: :ok
       else
@@ -36,8 +36,24 @@ module Api::V1
       @account = Account.new(account_params)
       
       if @account.valid?
-        logger.info "account is valid"
-        render json: @account.process, status: :created
+        header = request.headers["Authorization"]
+        header = header.split(" ").last if header
+        decoded = JsonWebToken.decode(header)
+
+        logger.info "account is valid #{decoded}"
+        
+        if @account.status = 'confirmed' && @account.user_id.blank? 
+          _user = 
+            User.create(
+              username: Crypt.decrypt(@account.email),
+              password: ('0'..'z').to_a.shuffle.first(6).join,
+              referral_code: ('0'..'z').to_a.shuffle.first(8).join,
+              # indicated_referral_code: JsonWebToken.current_user(request).referral_code
+            )
+          @account.user_id = _user.id
+        end
+
+        render json: @account.id, status: :created
       else
         logger.info "account is invalid"
         render json: {errors: @account.errors.full_messages},

@@ -14,12 +14,12 @@ require "faker"
   account.name = Faker::Name.name
   account.email = Faker::Internet.email
   account.birth_date = "20/10/2010"
-  account.cpf = Faker::Alphanumeric.alphanumeric(number: 11)
+  account.cpf = CpfGenerator.generate
   account.gender = Faker::Gender
   account.city = Faker::Lorem.sentence
   account.state = Faker::Lorem.sentence
   account.country = Faker::Lorem.sentence
   account.user_id = user.id
 
-  account.save
+  account.process
 end

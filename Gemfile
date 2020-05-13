@@ -20,7 +20,7 @@ gem 'active_model_serializers'
 gem "redis", "~> 4.0"
 
 # Use Active Model has_secure_password
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
@@ -34,6 +34,8 @@ group :development, :test do
 
   # to recognize the .env file
   gem "dotenv-rails"
+  
+  gem "faker"
 end
 
 group :test do
@@ -41,7 +43,6 @@ group :test do
   gem "guard-rspec", require: false
   gem "database_cleaner"
   gem "factory_bot_rails"
-  gem "faker"
   gem "shoulda-matchers"
   gem "webmock"
   gem "simplecov", require: false
