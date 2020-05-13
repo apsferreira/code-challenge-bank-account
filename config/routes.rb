@@ -15,8 +15,8 @@ Rails.application.routes.draw do
 
   namespace "api" do
     namespace "v1" do
-      resources :accounts, only: [:index, :create, :update, :destroy, :show]
-      resources :users, only: [:index, :create, :update, :destroy, :show]
+      resources :accounts # , only: [:index, :create, :update, :destroy, :show]
+      resources :users # , only: [:index, :create, :update, :destroy, :show]
       post "/auth/login", to: "authentications#login"
       get "/*a", to: "application#not_found"
     end

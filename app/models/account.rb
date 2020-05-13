@@ -1,14 +1,18 @@
 class Account < ApplicationRecord
   belongs_to :user, required: false
 	validates :cpf, presence: true, cpf: true
-	attr_accessor :name, :cpf, :email, :birth_date, :status, :gender, :city, :state, :country
-
+		
 	def process
 		logger.info "processing account creation"
 
 		encrypt_data
 		validation_status
 		create_or_update
+	end
+
+	def self.all_decript
+		logger.info "get All accounts with data decripted"
+		User.all
 	end
 
 	private

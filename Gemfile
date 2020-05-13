@@ -70,5 +70,8 @@ gem "sinatra", require: false
 # Autentication
 gem "jwt"
 
+# Security
+gem 'rack-attack'
+
 # Monitoring
 gem "newrelic_rpm"

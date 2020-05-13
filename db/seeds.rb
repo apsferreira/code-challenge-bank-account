@@ -6,9 +6,8 @@ require "faker"
   user.password_digest = Faker::Alphanumeric.alphanumeric(number: 6)
   user.indicated_referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
   user.referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
-  user.is_admin = Faker::Boolean
 
-  user.save
+  user.save!
 
   account = Account.new
   account.name = Faker::Name.name

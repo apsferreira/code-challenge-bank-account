@@ -1,7 +1,6 @@
 module Api::V1
   class UsersController < ApplicationController
-    before_action :authorize_request, except: %i[create, index]
-
+    # before_action :authorize_request
     # GET /api/v1/users
     def index
 
@@ -9,7 +8,7 @@ module Api::V1
       # header = header.split(" ").last if header
       # @decoded = JsonWebToken.decode(header)
 
-      @users = User.all 
+      users = User.all 
       
     # if JsonWebToken.current_user(request)[:is_admin]
     #   User.all
@@ -20,8 +19,8 @@ module Api::V1
 
       # logger.log @decoded[:referral_code]
 
-      if !@users.blank?
-        render json: @users, status: :ok
+      if !users.blank?
+        render json: users, adapter: :json
       else
         render json: [], status: :ok
       end
@@ -49,6 +48,7 @@ module Api::V1
 
     # POST /api/v1/users
     def create
+      logger.info "sochin #{user_params}"
       @user = User.new(user_params)
 
       if @user.save
@@ -76,7 +76,7 @@ module Api::V1
 
     def user_params
       params.permit(
-        :username, :password, :password_confirmation, :referral_code, :is_admin
+        :username, :password, :referral_code, :is_admin
       )
     end
   end
