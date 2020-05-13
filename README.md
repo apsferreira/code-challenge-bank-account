@@ -39,6 +39,8 @@ $ cd code-challenge-bank-account
 
 It is necessary to initially rename the env_example file to .env and set the appropriate settings related to your local environment.
 
+### With Docker and Docker Compose
+
 Assuming that the docker and docker-compose are installed, execute the command below:
 
 ```bash
@@ -53,7 +55,9 @@ After creating all the containers, the bank can be populated by running the comm
 $ rake db:seed
 ```
 
-More commands [here](#-more-commands) 
+More commands [here](##-more-commands) 
+
+### 
 
 The application can be checked at:
 
