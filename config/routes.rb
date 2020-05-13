@@ -15,9 +15,10 @@ Rails.application.routes.draw do
 
   namespace "api" do
     namespace "v1" do
-      resources :accounts # , only: [:index, :create, :update, :destroy, :show]
-      resources :users # , only: [:index, :create, :update, :destroy, :show]
+      resources :accounts
+      resources :users
       post "/auth/login", to: "authentications#login"
+      get "/alive", to: "application#alive"
       get "/*a", to: "application#not_found"
     end
   end

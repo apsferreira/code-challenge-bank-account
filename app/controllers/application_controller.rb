@@ -5,6 +5,10 @@ class ApplicationController < ActionController::API
     render json: {error: "not_found"}, status: :not_found
   end
 
+  def alive
+    render json: {alive: "true"}, status: :ok
+  end
+
   def authorize_request
     header = request.headers["Authorization"]
     header = header.split(" ").last if header
