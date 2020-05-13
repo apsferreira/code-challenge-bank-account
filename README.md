@@ -4,7 +4,7 @@
 
 Code challenge related to creating an API that supports requests for creating and editing accounts.
 
-The API documentation and testing can be done [here](##)
+The API documentation and testing can be done [here](https://app.swaggerhub.com/apis/WebSTIC/bank-account-opening/1.0.0)
 
 ## Stack
 

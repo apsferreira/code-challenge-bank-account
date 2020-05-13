@@ -4,6 +4,7 @@ require "sidekiq"
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  apipie
   # Sidekiq web config
   mount Sidekiq::Web => "/sidekiq"
 

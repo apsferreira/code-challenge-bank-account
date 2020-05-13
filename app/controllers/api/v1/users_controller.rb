@@ -37,6 +37,9 @@ module Api::V1
     # POST /api/v1/users
     def create
       @user = User.new(user_params)
+      
+      logger.info "user sochin #{@user.referral_code} #{@user.password}"
+      @user.password = params[:password]
 
       if @user.save
         render json: @user, status: :created
