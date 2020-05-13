@@ -18,7 +18,7 @@ This project was built using the technologies and some gems below:
 - [Sidekiq](https://sidekiq.org/)
 - [Docker](https://www.docker.com/)
 - [Docker-compose](https://docs.docker.com/compose/)
-- [Newrelic](https://newrelic.com/) (for monitoring)
+- [Newrelic](https://newrelic.com/)
 - [JWT](https://jwt.io/)
 - [rack-attack](https://github.com/kickstarter/rack-attack)
 
