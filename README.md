@@ -21,6 +21,7 @@ This project was built using the technologies and some gems below:
 - [Newrelic](https://newrelic.com/)
 - [JWT](https://jwt.io/)
 - [rack-attack](https://github.com/kickstarter/rack-attack)
+- [Travis](https://travis-ci.org/)
 
 ## Getting started
 
