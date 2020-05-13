@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/apsferreira/code-challenge-bank-account.svg?branch=master)](https://travis-ci.org/apsferreira/code-challenge-bank-account)
 
-code challenge related to creating an API that supports requests for creating and editing accounts.
+Code challenge related to creating an API that supports requests for creating and editing accounts.
 
 The API documentation and testing can be done [here](http://api.antoniopedro.com.br/api/v1/)
 
@@ -34,6 +34,8 @@ $ git clone git@github.com:apsferreira/code-challenge-bank-account.git
 $ cd code-challenge-bank-account
 ```
 
+## Build and deploy
+
 It is necessary to initially rename the env_example file to .env and set the appropriate settings related to your local environment.
 
 Assuming that the docker and docker-compose are installed, execute the command below:
@@ -58,10 +60,29 @@ The application can be checked at:
  http://localhost:3000/api/v1/alive
 ```
 
-Or  execute the comannd:
+Or  execute the comannd on your console:
 
 ```bash
 $ curl http://localhost:3000/api/v1/alive
+```
+
+## Features
+
+All the features requested in the challenge were implemented, as an improvement, it would add a greater amount of integration tests.
+For the sake of time, I opted for a reasonable approach in the model of the account entity, assuming that encryption should only be performed when saving the record, I could use [Active Record Callbacks](https://guides.rubyonrails.org/active_record_callbacks.html) (before_validate and before_save), but after several unsuccessful attempts, I opted for a simpler approach, and with that, I was not able to strictly follow the concept fat models and skinny Conrtoller.
+
+## Tests
+
+To start unit tests, execute the command below on the terminal:
+
+```bash
+$ rake test:all
+```
+
+To start watch unit tests,  execute the command below on the terminal:
+
+```bash
+$ rake test:monitor
 ```
 
 ## More commands
@@ -84,3 +105,9 @@ $ rake up:reload    	#stop and start all containers
 $ rake up:prd   	#init and start all containers of prd 
 $ rake up:prd_monitor   #init and start all containers of prd with logs
 ```
+
+## License
+
+Copyright [Antonio Pedro Ferreira](https://github.com/apsferreira).
+
+Released under an [MIT License](https://opensource.org/licenses/MIT).
