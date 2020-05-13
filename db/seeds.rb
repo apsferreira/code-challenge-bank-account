@@ -4,7 +4,6 @@ require "faker"
   user = User.new
   user.username = Faker::Name.name
   user.password_digest = Faker::Alphanumeric.alphanumeric(number: 6)
-  user.indicated_referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
   user.referral_code = Faker::Alphanumeric.alphanumeric(number: 8)
 
   user.save!
@@ -18,6 +17,7 @@ require "faker"
   account.city = Faker::Lorem.sentence
   account.state = Faker::Lorem.sentence
   account.country = Faker::Lorem.sentence
+  account.indicated_referral_code = user.referral_code
   account.user_id = user.id
 
   account.process

@@ -3,53 +3,48 @@ class Account < ApplicationRecord
 	validates :cpf, presence: true, cpf: true
 		
 	def process
-		logger.info "processing account creation"
+		logger.info "processing account creation #{self.name} #{self.cpf} #{self.email} #{self.birth_date} #{self.gender} #{self.city}"
 
 		encrypt_data
 		validation_status
 		create_or_update
 	end
 
-	def self.all_decript
-		logger.info "get All accounts with data decripted"
-		User.all
-	end
-
 	private
 
 	def encrypt_data 
-		logger.debug "encripting data: #{@name} #{@cpf} #{@email} #{@birth_date}"
+		logger.debug "encripting data: #{self.name} #{self.cpf} #{self.email} #{self.birth_date}"
 		
-		@name = Crypt.encrypt(@name) unless Crypt.already_encrypted?(@name)
-		@email = Crypt.encrypt(@email) unless Crypt.already_encrypted?(@email)
-		@cpf = Crypt.encrypt(@cpf) unless Crypt.already_encrypted?(@cpf)
-		@birth_date = Crypt.encrypt(@birth_date) unless Crypt.already_encrypted?(@birth_date)
+		self.name = Crypt.encrypt(self.name) unless Crypt.already_encrypted?(self.name)
+		self.email = Crypt.encrypt(self.email) unless Crypt.already_encrypted?(self.email)
+		self.cpf = Crypt.encrypt(self.cpf) unless Crypt.already_encrypted?(self.cpf)
+		self.birth_date = Crypt.encrypt(self.birth_date) unless Crypt.already_encrypted?(self.birth_date)
 	end
 
 	def validation_status
-		@status =  
-			if @name.blank? || @email.blank? \
-					|| @birth_date.blank? || @gender.blank? \
-					|| @city.blank? || @state.blank? || @country.blank?
+		self.status =  
+			if self.name.blank? || self.email.blank? \
+					|| self.birth_date.blank? || self.gender.blank? \
+					|| self.city.blank? || self.state.blank? || self.country.blank?
 							"pending"
 						else
 							"completed"
 						end
 
-		logger.debug "validation_status #{@status}"
+		logger.debug "validation_status #{self.status}"
 	end
 
 	def create_or_update
 		Account.upsert({
-			name: @name,
-			email: @email,
-			cpf: @cpf,
-			birth_date: @birth_date,
-			gender: @gender,
-			city: @city,
-			state: @state,
-			country: @country,
-			status: @status
+			name: self.name,
+			email: self.email,
+			cpf: self.cpf,
+			birth_date: self.birth_date,
+			gender: self.gender,
+			city: self.city,
+			state: self.state,
+			country: self.country,
+			status: self.status
 		}, unique_by: :cpf)
 	end
 end

@@ -1,29 +1,17 @@
 module Api::V1
   class UsersController < ApplicationController
-    # before_action :authorize_request
+    before_action :authorize_request
+
     # GET /api/v1/users
     def index
+      users = 
+        if JsonWebToken.current_user(request).is_admin
+          User.all
+        else
+          User.find(JsonWebToken.current_user(request).id)
+        end
 
-      # header = request.headers["Authorization"]
-      # header = header.split(" ").last if header
-      # @decoded = JsonWebToken.decode(header)
-
-      users = User.all 
-      
-    # if JsonWebToken.current_user(request)[:is_admin]
-    #   User.all
-    # else
-    #   User.all
-      # User.find_by_indicated_referral_code(JsonWebToken.current_user(request)[:referral_code])
-    # end
-
-      # logger.log @decoded[:referral_code]
-
-      if !users.blank?
-        render json: users, adapter: :json
-      else
-        render json: [], status: :ok
-      end
+      render json: users, adapter: :json
     end
 
     # GET /api/v1/users/{id}
@@ -48,7 +36,6 @@ module Api::V1
 
     # POST /api/v1/users
     def create
-      logger.info "sochin #{user_params}"
       @user = User.new(user_params)
 
       if @user.save
@@ -75,7 +62,7 @@ module Api::V1
     private
 
     def user_params
-      params.permit(
+      params.require(:user).permit(
         :username, :password, :referral_code, :is_admin
       )
     end

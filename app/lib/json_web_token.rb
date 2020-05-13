@@ -14,6 +14,6 @@ class JsonWebToken
   def self.current_user(request)
     header = request.headers["Authorization"]
     header = header.split(" ").last if header
-    JsonWebToken.decode(header)
+    User.find(JsonWebToken.decode(header)[:user_id])
   end
 end

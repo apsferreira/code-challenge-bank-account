@@ -1,21 +1,26 @@
 module Api::V1
   class AccountsController < ApplicationController
-    # before_action :authorize_request
+    before_action :authorize_request
 
     # GET /api/v1/accounts
     def index
-      @accounts = Account.all
-
-      @accounts.map { |account| logger.info "get #{account.status}" }
-        # if JsonWebToken.current_user(request)[:is_admin]
-        #   logger.info "return all accounts"
-        #   Account.all
-        # else 
-        #   logger.info "return an account"
-        #   Account.find_by_user_id(JsonWebToken.current_user(request)[:user_id])
-        # end
-
-      render json: @accounts, status: :ok
+      if JsonWebToken.current_user(request).is_admin
+        logger.info "return all accounts"
+        @accounts = 
+          Account.all.each do |account| 
+            account.name = Crypt.decrypt(account.name) 
+          end
+      else 
+        logger.info "return associated accounts"
+        @accounts = Account.find_by_indicated_referral_code(JsonWebToken.current_user(request).referral_code)
+      end
+      
+      if !@accounts.blank?
+        @accounts.name = Crypt.decrypt(@accounts.name) 
+        render json: @accounts, status: :ok
+      else
+        render json: [], status: :ok
+      end
     end
 
     # GET /api/v1/accounts/{id}
@@ -32,32 +37,37 @@ module Api::V1
 
     # POST /api/v1/accounts
     def create
-      logger.info "create or update an account"
-      @account = Account.new(account_params)
-      
-      if @account.valid?
-        @account.process
-        # header = request.headers["Authorization"]
-        # header = header.split(" ").last if header
-        # decoded = JsonWebToken.decode(header)
+      account = Account.new(account_params)
+      if account.valid?
+        if account.status == 'completed' && account.user_id.blank? 
+          indicated_referral_code =  
+            if JsonWebToken.current_user(request).blank? 
+              JsonWebToken.current_user(request).referral_code
+            else
+              account.indicated_referral_code
+            end
+          
+          @password = ('0'..'z').to_a.shuffle.first(6).join
 
-        # logger.info "account is valid #{decoded}"
+          @user = 
+            User.create(
+              username: Crypt.decrypt(account.email),
+              password: @password,
+              referral_code: ('0'..'z').to_a.shuffle.first(8).join,
+              indicated_referral_code: indicated_referral_code
+            )
+
+            logger.debug "user #{@user.valid?}"
+          
+          account.user_id = @user.id  
+        end
         
-        # if @account.status = 'confirmed' && @account.user_id.blank? 
-        #   _user = 
-        #     User.create(
-        #       username: Crypt.decrypt(@account.email),
-        #       password: ('0'..'z').to_a.shuffle.first(6).join,
-        #       referral_code: ('0'..'z').to_a.shuffle.first(8).join,
-        #       # indicated_referral_code: JsonWebToken.current_user(request).referral_code
-        #     )
-        #   @account.user_id = _user.id
-        # end
+        account.process
 
-        render json: @account, status: :created
+        render json: { account: account, password: @password }, status: :created
       else
         logger.info "account is invalid"
-        render json: {errors: @account.errors.full_messages},
+        render json: {errors: account.errors.full_messages},
                status: :unprocessable_entity
       end
     end
@@ -69,13 +79,9 @@ module Api::V1
 
     private
 
-    def set_account
-      @set_account = Account.find(params[:id])
-    end
-
     def account_params
       params.require(:account).permit(
-        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :status
+        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :indicated_referral_code
       )
     end
   end

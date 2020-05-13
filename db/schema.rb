@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_13_081938) do
+ActiveRecord::Schema.define(version: 2020_05_13_133446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -29,13 +29,13 @@ ActiveRecord::Schema.define(version: 2020_05_13_081938) do
     t.uuid "user_id"
     t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.string "indicated_referral_code"
     t.index ["cpf"], name: "index_accounts_on_cpf", unique: true
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
-    t.string "indicated_referral_code"
     t.string "referral_code"
     t.boolean "is_admin", default: false
     t.datetime "created_at", precision: 6, null: false
