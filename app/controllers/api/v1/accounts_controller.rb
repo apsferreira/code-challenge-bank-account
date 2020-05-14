@@ -43,7 +43,7 @@ module Api::V1
       if account.valid?
         account.validation_status
 
-        @password = ('0'..'z').to_a.shuffle.first(6).join
+        @password = SecureRandom.alphanumeric(6)
 
         if account.status == 'completed' && account.user_id.blank? 
           account.indicated_referral_code = 
@@ -55,7 +55,7 @@ module Api::V1
             User.new(
               username: account.email,
               password: @password,
-              referral_code: ('0'..'z').to_a.shuffle.first(8).join
+              referral_code: SecureRandom.alphanumeric(8)
             )
           
             if @user.valid? && @user.save
@@ -64,6 +64,7 @@ module Api::V1
             else
               @user = User.find_by_username(account.email)
               @user.password_digest = BCrypt::Password.create(@password) if @user
+              @referral_code = @user.referral_code
               account.user_id = @user.id
               account.process
             end 
@@ -71,7 +72,7 @@ module Api::V1
           account.process
         end
 
-        render json: { account: account, access: { username: Crypt.decrypt(account.email), password: @password }}, status: :created
+        render json: { account: account, referral_code: @referral_code,  access: { username: Crypt.decrypt(account.email), password: @password }}, status: :created
       else
         logger.info "account is invalid"
         render json: {errors: account.errors.full_messages},
