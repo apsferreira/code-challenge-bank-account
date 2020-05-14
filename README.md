@@ -125,8 +125,7 @@ $ rake test:request     #run unit tests of requests
 $ rake up:dev 		#init and start all containers of dev
 $ rake up:dev_monitor   #init and start all containers of dev with logs
 $ rake up:reload    	#stop and start all containers
-$ rake up:prd   	#init and start all containers of prd 
-$ rake up:prd_monitor   #init and start all containers of prd with logs
+$ rake up:prd   	#build and push the last version of container application for prod 
 ```
 
 ## License
