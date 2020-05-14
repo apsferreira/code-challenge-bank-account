@@ -101,11 +101,11 @@ For monitoring purposes, newrelic was integrated into the application, [sidekiq]
 
 #### Newrelic
 
-![Newrelic](newrelic.png)
+![Newrelic](imgs/newrelic.png)
 
 #### Sidekiq
 
-![Newrelic](sidekiq.png)
+![Newrelic](imgs/sidekiq.png)
 
 
 ## Tests
