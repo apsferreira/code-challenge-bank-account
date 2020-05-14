@@ -1,6 +1,12 @@
 module Api::V1
   class AuthenticationsController < ApplicationController
-    before_action :authorize_request, except: :login
+    before_action :authorize_request, except: [:login, :alive]
+
+    # GET /api/v1/alive 
+    def alive
+      puts "chegou"
+      render json: {alive: "true"}, status: :ok
+    end
 
     # POST /api/v1/auth/login
     def login

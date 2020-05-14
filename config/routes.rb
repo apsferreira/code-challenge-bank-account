@@ -4,6 +4,7 @@ require "sidekiq"
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  apipie
   # Sidekiq web config
   mount Sidekiq::Web => "/sidekiq"
 
@@ -18,7 +19,7 @@ Rails.application.routes.draw do
       resources :accounts
       resources :users
       post "/auth/login", to: "authentications#login"
-      get "/alive", to: "application#alive"
+      get "/alive", to: "authentications#alive"
       get "/*a", to: "application#not_found"
     end
   end
