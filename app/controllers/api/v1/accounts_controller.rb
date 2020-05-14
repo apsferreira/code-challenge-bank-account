@@ -60,6 +60,7 @@ module Api::V1
           
             if @user.valid? && @user.save
               account.user_id = @user.id  
+              @referral_code = @user.referral_code
               account.process
             else
               @user = User.find_by_username(account.email)

@@ -41,6 +41,12 @@ $ cd code-challenge-bank-account
 
 It is necessary to initially rename the env_example file to .env and set the appropriate settings related to your local environment.
 
+run the command below to install the gems configured in the project
+
+```bash
+$ bundler install
+```
+
 ### With Docker and Docker Compose
 
 Assuming that the docker and docker-compose are installed, execute the command below:
@@ -72,7 +78,6 @@ then, to start the application run the command below
 ```bash
 rails s -b 0.0.0.0
 ```
-
 
 After installations, the API can be checked at:
 
