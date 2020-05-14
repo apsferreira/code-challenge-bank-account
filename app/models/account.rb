@@ -3,11 +3,20 @@ class Account < ApplicationRecord
 	validates :cpf, presence: true, cpf: true
 		
 	def process
-		logger.info "processing account creation #{self.name} #{self.cpf} #{self.email} #{self.birth_date} #{self.gender} #{self.city}"
-
+		logger.debug "verify user: #{self.user_id}" 
 		encrypt_data
-		validation_status
 		create_or_update
+	end
+
+	def validation_status
+		self.status =  
+			if self.name.blank? || self.email.blank? \
+					|| self.birth_date.blank? || self.gender.blank? \
+					|| self.city.blank? || self.state.blank? || self.country.blank?
+							"pending"
+						else
+							"completed"
+						end
 	end
 
 	private
@@ -21,19 +30,6 @@ class Account < ApplicationRecord
 		self.birth_date = Crypt.encrypt(self.birth_date) unless Crypt.already_encrypted?(self.birth_date)
 	end
 
-	def validation_status
-		self.status =  
-			if self.name.blank? || self.email.blank? \
-					|| self.birth_date.blank? || self.gender.blank? \
-					|| self.city.blank? || self.state.blank? || self.country.blank?
-							"pending"
-						else
-							"completed"
-						end
-
-		logger.debug "validation_status #{self.status}"
-	end
-
 	def create_or_update
 		Account.upsert({
 			name: self.name,
@@ -44,7 +40,8 @@ class Account < ApplicationRecord
 			city: self.city,
 			state: self.state,
 			country: self.country,
-			status: self.status
+			status: self.status,
+			user_id: self.user_id
 		}, unique_by: :cpf)
 	end
 end

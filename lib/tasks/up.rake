@@ -17,15 +17,9 @@ namespace :up do
     system "docker-compose up"
   end
 
-  desc "initialize and deploy application on production"
+  desc "initialize and push container application for production"
   task prd: :environment do
-    system "docker build -t $containerRepositoryName:latest ."
-    system "docker-compose up -d"
-  end
-  
-  desc "initialize and deploy application on production"
-  task prd_monitor: :environment do
-    system "docker build -t $containerRepositoryName:latest ."
-    system "docker-compose up"
+    system "docker build -t apsferreira/bank-account:latest ."
+    system "docker-push apsferreira/bank-account:latest"
   end
 end

@@ -1,6 +1,8 @@
+require 'bcrypt'
+
 module Api::V1
   class AccountsController < ApplicationController
-    before_action :authorize_request
+    before_action :authorize_request, except: [:create]
 
     # GET /api/v1/accounts
     def index
@@ -39,33 +41,37 @@ module Api::V1
     def create
       account = Account.new(account_params)
       if account.valid?
+        account.validation_status
+
+        @password = ('0'..'z').to_a.shuffle.first(6).join
+
         if account.status == 'completed' && account.user_id.blank? 
-          byebug
-          indicated_referral_code =  
-            if JsonWebToken.current_user(request).blank? 
+          account.indicated_referral_code = 
+            if account.indicated_referral_code.blank? && !JsonWebToken.current_user(request).blank? 
               JsonWebToken.current_user(request).referral_code
-            else
-              account.indicated_referral_code
             end
-          
-          @password = ('0'..'z').to_a.shuffle.first(6).join
-
+            
           @user = 
-            User.create(
-              username: Crypt.decrypt(account.email),
+            User.new(
+              username: account.email,
               password: @password,
-              referral_code: ('0'..'z').to_a.shuffle.first(8).join,
-              indicated_referral_code: indicated_referral_code
+              referral_code: ('0'..'z').to_a.shuffle.first(8).join
             )
-
-            logger.debug "user #{@user.valid?}"
           
-          account.user_id = @user.id  
+            if @user.valid? && @user.save
+              account.user_id = @user.id  
+              account.process
+            else
+              @user = User.find_by_username(account.email)
+              @user.password_digest = BCrypt::Password.create(@password) if @user
+              account.user_id = @user.id
+              account.process
+            end 
+        else
+          account.process
         end
-        
-        account.process
 
-        render json: { account: account, password: @password }, status: :created
+        render json: { account: account, access: { username: Crypt.decrypt(account.email), password: @password }}, status: :created
       else
         logger.info "account is invalid"
         render json: {errors: account.errors.full_messages},
@@ -82,7 +88,7 @@ module Api::V1
 
     def account_params
       params.require(:account).permit(
-        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :indicated_referral_code
+        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :indicated_referral_code, :user
       )
     end
   end

@@ -1,6 +1,6 @@
 module Api::V1
   class UsersController < ApplicationController
-    before_action :authorize_request
+    before_action :authorize_request, except: [:create]
 
     # GET /api/v1/users
     def index

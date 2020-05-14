@@ -4,7 +4,6 @@ module Api::V1
 
     # GET /api/v1/alive 
     def alive
-      puts "chegou"
       render json: {alive: "true"}, status: :ok
     end
 
