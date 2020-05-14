@@ -18,10 +18,10 @@ module Api::V1
     def show
       begin
         @user =
-          if current_user.is_admin
+          if JsonWebToken.current_user(request).is_admin
             User.find(params[:id])
           else
-            User.find(current_user.id)
+            User.find(JsonWebToken.current_user(request).id)
           end
       rescue ActiveRecord::RecordNotFound
         @user = nil

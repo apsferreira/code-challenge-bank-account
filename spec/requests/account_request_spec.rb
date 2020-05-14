@@ -1,30 +1,30 @@
 require "rails_helper"
 
 RSpec.describe "Accounts API", type: :request do
-  # describe "GET /api/v1/accounts" do
-  #   # let (:user) { build(:user) }
+  describe "GET /api/v1/accounts" do
+    let (:user) { build(:user) }
   #   # let (:accounts) { create_list(:account, 10) }
   #   # let (:account_id) { accounts.first.id }
 
-  #   context "when the request with NO authentication header" do
-  #     it "should return unauth for retrieve current user info before login" do
-  #       get "/api/v1/accounts"
-  #       expect(response).to have_http_status(:unauthorized)
-  #     end
-  #   end
+    context "when the request with NO authentication header" do
+      it "should return unauth for retrieve current user info before login" do
+        get "/api/v1/accounts"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
 
-  #   context "when the request contains an authentication header" do
-  #     before { get "/api/v1/accounts", headers: authenticated_header(user) }
+    # context "when the request contains an authentication header" do
+    #   before { get "/api/v1/accounts", headers: authenticated_header(user) }
 
-  #     it "should return the user info" do
-  #       expect(json).not_to be_empty
-  #       expect(json.size).to eq(10)
-  #     end
+    #   it "should return the user info" do
+    #     expect(json).not_to be_empty
+    #     expect(json.size).to eq(10)
+    #   end
 
-  #     it "returns status code 200" do
-  #       expect(response).to have_http_status(:ok)
-  #     end
-  #   end
+    #   it "returns status code 200" do
+    #     expect(response).to have_http_status(:ok)
+    #   end
+    # end
 
   #   describe "GET /api/v1/accounts/:id" do
   #     before { get "/api/v1/accounts/#{account_id}" }
@@ -52,5 +52,5 @@ RSpec.describe "Accounts API", type: :request do
   #       end
   #     end
   #   end
-  # end
+  end
 end

@@ -4,7 +4,9 @@
 
 Code challenge related to creating an API that supports requests for creating and editing accounts.
 
-The API documentation and testing can be done [here](https://app.swaggerhub.com/apis/WebSTIC/bank-account-opening/1.0.0)
+The API documentation can be done [here](https://app.swaggerhub.com/apis-docs/WebSTIC/bank-account-opening/1.0.0#/)
+
+An example of how the API works can be recorded [here](http://api.antoniopedro.com.br/api/v1/alive)
 
 ## Stack
 
@@ -57,9 +59,22 @@ $ rake db:seed
 
 More commands [here](##-more-commands) 
 
-### 
+### With local rails configuration
 
-The application can be checked at:
+For this case we will assume that the local environment is configured and reflected in the .env file. configured in the previous section, along with potgres and other settings.
+
+```bash
+rails db:create db:migrate 
+````
+
+then, to start the application run the command below
+
+```bash
+rails s -b 0.0.0.0
+```
+
+
+After installations, the API can be checked at:
 
 ```bash
  http://localhost:3000/api/v1/alive

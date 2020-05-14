@@ -13,10 +13,10 @@ module Api::V1
       else 
         logger.info "return associated accounts"
         @accounts = Account.find_by_indicated_referral_code(JsonWebToken.current_user(request).referral_code)
+        @accounts.name = Crypt.decrypt(@accounts.name) if !@accounts.blank?
       end
       
       if !@accounts.blank?
-        @accounts.name = Crypt.decrypt(@accounts.name) 
         render json: @accounts, status: :ok
       else
         render json: [], status: :ok
@@ -40,6 +40,7 @@ module Api::V1
       account = Account.new(account_params)
       if account.valid?
         if account.status == 'completed' && account.user_id.blank? 
+          byebug
           indicated_referral_code =  
             if JsonWebToken.current_user(request).blank? 
               JsonWebToken.current_user(request).referral_code
