@@ -41,7 +41,8 @@ class Account < ApplicationRecord
 			state: self.state,
 			country: self.country,
 			status: self.status,
-			user_id: self.user_id
+			user_id: self.user_id,
+			indicated_referral_code: self.indicated_referral_code
 		}, unique_by: :cpf)
 	end
 end

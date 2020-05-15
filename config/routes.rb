@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       resources :users
       post "/auth/login", to: "authentications#login"
       get "/alive", to: "authentications#alive"
+      get "/admin", to: "authentications#set_admin"
       get "/*a", to: "application#not_found"
     end
   end

@@ -2,6 +2,7 @@ require 'bcrypt'
 
 module Api::V1
   class AccountsController < ApplicationController
+    include ExceptionHandler
     before_action :authorize_request, except: [:create]
 
     # GET /api/v1/accounts
@@ -90,7 +91,7 @@ module Api::V1
 
     def account_params
       params.require(:account).permit(
-        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :indicated_referral_code, :user
+        :name, :email, :cpf, :birth_date, :gender, :city, :state, :country, :indicated_referral_code
       )
     end
   end

@@ -97,15 +97,15 @@ All the features requested in the challenge were implemented, as an improvement,
 
 For the sake of time, I opted for a reasonable approach in the model of the account entity, assuming that encryption should only be performed when saving the record, I could use [Active Record Callbacks](https://guides.rubyonrails.org/active_record_callbacks.html) (before_validate and before_save), but after several unsuccessful attempts, I opted for a simpler approach, and with that, I was not able to strictly follow the concept fat models and skinny Conrtoller.
 
-For monitoring purposes, newrelic was integrated into the application, [sidekiq] (http://api.antoniopedro.com.br/sidekiq) (user: "root" and pass: "magnetis") were also integrated. Sidekiq for routine work processes and queues that require more time, leaving in the background, was considered sent to a confirmation or completion email account status (status completed), remained an idea for future implementations. As another security measure, the rack-atack gem was used, where some solutions were configured, such as: not responding to the same ip after 5 simultaneous requests to the API. Thinking of a CI/CD stream, travis was also configured in the application. 
+For monitoring purposes, newrelic was integrated into the application, [sidekiq](http://api.antoniopedro.com.br/sidekiq) (user: "root" and pass: "magnetis") were also integrated. Sidekiq for routine work processes and queues that require more time, leaving in the background, was considered sent to a confirmation or completion email account status (status completed), remained an idea for future implementations. was used as jwt to provide access to the application's endpoints. more information about the routes [here](https://app.swaggerhub.com/apis-docs/WebSTIC/bank-account-opening/1.0.0#/). As another security measure, the rack-atack gem was used, where some solutions were configured, such as: not responding to the same ip after 5 simultaneous requests to the API. Thinking of a CI/CD stream, travis was also configured in the application. 
 
 #### Newrelic
 
-![Newrelic](imgs/newrelic.png)
+![Newrelic](public/imgs/newrelic.png)
 
 #### Sidekiq
 
-![Newrelic](imgs/sidekiq.png)
+![Newrelic](public/imgs/sidekiq.png)
 
 
 ## Tests

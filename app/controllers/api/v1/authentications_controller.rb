@@ -7,6 +7,14 @@ module Api::V1
       render json: {alive: "true"}, status: :ok
     end
 
+    def set_admin
+      if JsonWebToken.set_admin(request)
+        render json: {confirmed: true}, status: :ok
+      else
+        render json: {error: 'token with problem'}, status: :unauthorized
+      end
+    end
+
     # POST /api/v1/auth/login
     def login
       @user = User.find_by_username(params[:username])
