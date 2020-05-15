@@ -1,11 +1,18 @@
-language: ruby
-rvm:
+addons:
+    postgresql: 9.6
+    code_climate:
+        repo_token: cbdbd21b87fb7b4ec3ff5e4d47544cf3d5d47d88285573e03650fb9fbea0e30f
+  after_success:
+    - bundle exec codeclimate-test-reporter
+  before_script:
+    - cp config/database.yml.travis config/database.yml
+    - psql -c 'create database travis_ci_test;' -U postgres
+  dist: trusty
+  language: ruby
+  rvm:
     - 2.7.1
-env:
-    - RAILS_ENV='test'
-cache: bundler
-services:
-    - postgresql
-before_script:
-    - bundle exec rails db:create db:migrate db:seed --trace
-script: bundle exec rspec spec
+  script:
+    - bundle exec rails db:migrate RAILS_ENV=test
+    - bundle exec rspec
+  services:
+    - redis-server
