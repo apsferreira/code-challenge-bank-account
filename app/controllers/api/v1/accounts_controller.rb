@@ -47,29 +47,27 @@ module Api::V1
         @password = SecureRandom.alphanumeric(6)
 
         if account.status == 'completed' && account.user_id.blank? 
+          
           account.indicated_referral_code = 
             if account.indicated_referral_code.blank? && !JsonWebToken.current_user(request).blank? 
               JsonWebToken.current_user(request).referral_code
             end
+
+            @user = User.find_by_username(account.email)
             
-          @user = 
-            User.new(
-              username: account.email,
-              password: @password,
-              referral_code: SecureRandom.alphanumeric(8)
-            )
-          
-            if @user.valid? && @user.save
-              account.user_id = @user.id  
-              @referral_code = @user.referral_code
-              account.process
-            else
-              @user = User.find_by_username(account.email)
-              @user.password_digest = BCrypt::Password.create(@password) if @user
-              @referral_code = @user.referral_code
-              account.user_id = @user.id
-              account.process
-            end 
+            unless @user
+              @user = 
+                User.create(
+                  username: account.email,
+                  password_digest: BCrypt::Password.create(@password),
+                  referral_code: SecureRandom.alphanumeric(8)
+                )
+            end
+
+            @referral_code = @user.referral_code
+            account.user_id = @user.id  
+
+            account.process               
         else
           account.process
         end
