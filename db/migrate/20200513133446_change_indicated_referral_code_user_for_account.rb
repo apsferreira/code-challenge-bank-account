@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ChangeIndicatedReferralCodeUserForAccount < ActiveRecord::Migration[6.0]
   def change
     remove_column :users, :indicated_referral_code
-    add_column :accounts, :indicated_referral_code,  :string
+    add_column :accounts, :indicated_referral_code, :string
   end
 end

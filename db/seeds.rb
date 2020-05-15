@@ -1,4 +1,6 @@
-require "faker"
+# frozen_string_literal: true
+
+require 'faker'
 
 5.times do
   user = User.new
@@ -11,7 +13,7 @@ require "faker"
   account = Account.new
   account.name = Faker::Name.name
   account.email = Faker::Internet.email
-  account.birth_date = "20/10/2010"
+  account.birth_date = '20/10/2010'
   account.cpf = CpfGenerator.generate
   account.gender = Faker::Gender
   account.city = Faker::Lorem.sentence

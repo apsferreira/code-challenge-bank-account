@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JsonWebToken
   SECRET_KEY = Rails.application.secrets.secret_key_base.to_s
 
@@ -7,14 +9,12 @@ class JsonWebToken
   end
 
   def self.decode(token)
-    begin
-      decoded = JWT.decode(token, SECRET_KEY)[0]
-      HashWithIndifferentAccess.new decoded
-    rescue JWT::ExpiredSignature, JWT::VerificationError => e
-      raise ExceptionHandler::ExpiredSignature, "Access denied!. Token has expired."
-    rescue JWT::DecodeError, JWT::VerificationError => e
-      raise ExceptionHandler::DecodeError, "Access denied!. Invalid token supplied."
-    end
+    decoded = JWT.decode(token, SECRET_KEY)[0]
+    HashWithIndifferentAccess.new decoded
+  rescue JWT::ExpiredSignature, JWT::VerificationError => e
+    raise ExceptionHandler::ExpiredSignature, 'Access denied!. Token has expired.'
+  rescue JWT::DecodeError, JWT::VerificationError => e
+    raise ExceptionHandler::DecodeError, 'Access denied!. Invalid token supplied.'
   end
 
   def self.set_admin(request)
@@ -24,9 +24,9 @@ class JsonWebToken
   end
 
   def self.current_user(request)
-    header = request.headers["Authorization"]
-    header = header.split(" ").last if header
-    
+    header = request.headers['Authorization']
+    header = header.split(' ').last if header
+
     if !header.blank? && !JsonWebToken.decode(header).blank?
       User.find(JsonWebToken.decode(header)[:user_id])
     end

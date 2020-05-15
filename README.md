@@ -88,7 +88,7 @@ After installations, the API can be checked at:
 Or  execute the comannd on your console:
 
 ```bash
-$ curl http://localhost:3000/api/v1/alive
+$ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET http://localhost:3000/api/v1/alive
 ```
 
 ## Features

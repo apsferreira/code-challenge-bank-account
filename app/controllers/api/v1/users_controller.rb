@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V1
   class UsersController < ApplicationController
     include ExceptionHandler
@@ -5,7 +7,7 @@ module Api::V1
 
     # GET /api/v1/users
     def index
-      users = 
+      users =
         if JsonWebToken.current_user(request).is_admin
           User.all
         else
@@ -34,8 +36,7 @@ module Api::V1
     # POST /api/v1/users
     def create
       @user = User.new(user_params)
-      
-      logger.info "user sochin #{@user.referral_code} #{@user.password}"
+
       @user.password = params[:password]
 
       if @user.save

@@ -1,6 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe "Authentications", type: :request do
+require 'rails_helper'
+
+RSpec.describe 'Authentications', type: :request do
   # describe "GET /api/v1/auth/login" do
   #   context "when the request with NO authentication header" do
   #     it "should return unauth for retrieve current user info before login" do

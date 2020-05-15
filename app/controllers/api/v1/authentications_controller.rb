@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 module Api::V1
   class AuthenticationsController < ApplicationController
     include ExceptionHandler
-    before_action :authorize_request, except: [:login, :alive]
+    before_action :authorize_request, except: %i[login alive]
 
-    # GET /api/v1/alive 
+    # GET /api/v1/alive
     def alive
-      render json: {alive: "true"}, status: :ok
+      render json: { alive: 'true' }, status: :ok
     end
 
     def set_admin
       if JsonWebToken.set_admin(request)
-        render json: {confirmed: true}, status: :ok
+        render json: { confirmed: true }, status: :ok
       else
         raise ExceptionHandler::AccessDenied, 'token with problem'
       end
@@ -22,10 +24,10 @@ module Api::V1
       if @user&.authenticate(params[:password])
         token = JsonWebToken.encode(user_id: @user.id, referral_code: @user.referral_code, is_admin: @user.is_admin)
         time = Time.now + 24.hours.to_i
-        render json: {token: token, expiration: time.strftime("%m-%d-%Y %H:%M"),
-                      username: @user.username}, status: :ok
+        render json: { token: token, expiration: time.strftime('%m-%d-%Y %H:%M'),
+                       username: @user.username }, status: :ok
       else
-        raise ExceptionHandler::AccessDenied, 'user or password with error'
+        raise ExceptionHandler::AccessDenied, 'username or password with error'
       end
     end
 

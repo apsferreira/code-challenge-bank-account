@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bcrypt'
 
 module Api::V1
@@ -8,17 +10,17 @@ module Api::V1
     # GET /api/v1/accounts
     def index
       if JsonWebToken.current_user(request).is_admin
-        logger.info "return all accounts"
-        @accounts = 
-          Account.all.each do |account| 
-            account.name = Crypt.decrypt(account.name) 
+        logger.info 'return all accounts'
+        @accounts =
+          Account.all.each do |account|
+            account.name = Crypt.decrypt(account.name)
           end
-      else 
-        logger.info "return associated accounts"
+      else
+        logger.info 'return associated accounts'
         @accounts = Account.find_by_indicated_referral_code(JsonWebToken.current_user(request).referral_code)
-        @accounts.name = Crypt.decrypt(@accounts.name) if !@accounts.blank?
+        @accounts.name = Crypt.decrypt(@accounts.name) unless @accounts.blank?
       end
-      
+
       if !@accounts.blank?
         render json: @accounts, status: :ok
       else
@@ -30,11 +32,11 @@ module Api::V1
     def show
       @account = Account.find(params[:id])
       if @account && JsonWebToken.current_user(request).is_admin
-        logger.info "show an account"
+        logger.info 'show an account'
         render json: @account, status: :ok
       else
-        logger.info "not authorize"
-        raise ExceptionHandler::AccessDenied, "Access denied"
+        logger.info 'not authorize'
+        raise ExceptionHandler::AccessDenied, 'Access denied'
       end
     end
 
@@ -46,35 +48,32 @@ module Api::V1
 
         @password = SecureRandom.alphanumeric(6)
 
-        if account.status == 'completed' && account.user_id.blank? 
-          
-          account.indicated_referral_code = 
-            if account.indicated_referral_code.blank? && !JsonWebToken.current_user(request).blank? 
+        if account.status == 'completed' && account.user_id.blank?
+
+          account.indicated_referral_code =
+            if account.indicated_referral_code.blank? && !JsonWebToken.current_user(request).blank?
               JsonWebToken.current_user(request).referral_code
             end
 
-            @user = User.find_by_username(account.email)
-            
-            unless @user
-              @user = 
-                User.create(
-                  username: account.email,
-                  password_digest: BCrypt::Password.create(@password),
-                  referral_code: SecureRandom.alphanumeric(8)
-                )
-            end
+          @user = User.find_by_username(account.email)
 
-            @referral_code = @user.referral_code
-            account.user_id = @user.id  
+          @user ||= User.create(
+            username: account.email,
+            password_digest: BCrypt::Password.create(@password),
+            referral_code: SecureRandom.alphanumeric(8)
+          )
 
-            account.process               
+          @referral_code = @user.referral_code
+          account.user_id = @user.id
+
+          account.process
         else
           account.process
         end
 
-        render json: { account: account, referral_code: @referral_code,  access: { username: Crypt.decrypt(account.email), password: @password }}, status: :created
+        render json: { account: account, referral_code: @referral_code, access: { username: Crypt.decrypt(account.email), password: @password } }, status: :created
       else
-        logger.info "account is invalid"
+        logger.info 'account is invalid'
         raise ExceptionHandler::RecordInvalid, account.errors.full_messages
       end
     end
