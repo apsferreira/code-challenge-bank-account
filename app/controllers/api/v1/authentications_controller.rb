@@ -1,5 +1,6 @@
 module Api::V1
   class AuthenticationsController < ApplicationController
+    include ExceptionHandler
     before_action :authorize_request, except: [:login, :alive]
 
     # GET /api/v1/alive 
@@ -11,7 +12,7 @@ module Api::V1
       if JsonWebToken.set_admin(request)
         render json: {confirmed: true}, status: :ok
       else
-        render json: {error: 'token with problem'}, status: :unauthorized
+        raise ExceptionHandler::AccessDenied, 'token with problem'
       end
     end
 
@@ -24,7 +25,7 @@ module Api::V1
         render json: {token: token, expiration: time.strftime("%m-%d-%Y %H:%M"),
                       username: @user.username}, status: :ok
       else
-        render json: {error: "unauthorized"}, status: :unauthorized
+        raise ExceptionHandler::AccessDenied, 'user or password with error'
       end
     end
 

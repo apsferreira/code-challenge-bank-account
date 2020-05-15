@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include ExceptionHandler
+
   def not_found
     render json: {error: "not_found"}, status: :not_found
   end
@@ -12,9 +14,9 @@ class ApplicationController < ActionController::API
       @decoded = JsonWebToken.decode(header)
       @current_user = User.find(@decoded[:user_id])
     rescue ActiveRecord::RecordNotFound => e
-      render json: {errors: e.message}, status: :unauthorized
+      raise ExceptionHandler::RecordNotFound, e.message
     rescue JWT::DecodeError => e
-      render json: {errors: e.message}, status: :unauthorized
+      raise ExceptionHandler::DecodeError, e.message
     end
   end
 end

@@ -1,5 +1,6 @@
 module Api::V1
   class UsersController < ApplicationController
+    include ExceptionHandler
     before_action :authorize_request, except: [:create]
 
     # GET /api/v1/users
@@ -16,21 +17,17 @@ module Api::V1
 
     # GET /api/v1/users/{id}
     def show
-      begin
-        @user =
-          if JsonWebToken.current_user(request).is_admin
-            User.find(params[:id])
-          else
-            User.find(JsonWebToken.current_user(request).id)
-          end
-      rescue ActiveRecord::RecordNotFound
-        @user = nil
-      end
+      @user =
+        if JsonWebToken.current_user(request).is_admin
+          User.find(params[:id])
+        else
+          raise ExceptionHandler::AccessDenied, 'Access Denied'
+        end
 
       if @user
         render json: @user, status: :ok
       else
-        render json: "Not Found", status: :not_found
+        raise ExceptionHandler::RecordNotFound, 'User not found'
       end
     end
 
@@ -44,16 +41,14 @@ module Api::V1
       if @user.save
         render json: @user, status: :created
       else
-        render json: {errors: @user.errors.full_messages},
-               status: :unprocessable_entity
+        raise ExceptionHandler::RecordInvalid, @user.errors.full_messages
       end
     end
 
     # PUT /api/v1/users/{id}
     def update
       unless @user.update(user_params)
-        render json: {errors: @user.errors.full_messages},
-               status: :unprocessable_entity
+        raise ExceptionHandler::RecordInvalid, @user.errors.full_messages
       end
     end
 

@@ -59,13 +59,13 @@ RSpec.describe Account, type: :model do
         account.cpf = CpfGenerator.generate
         account.name = nil
 
-        account.process
+        account.validation_status
 
         expect(account.status).to eq("pending")
       end
 
       it "status completed for all completed data" do
-        account.process
+        account.validation_status
 
         expect(account.status).to eq("completed")
       end

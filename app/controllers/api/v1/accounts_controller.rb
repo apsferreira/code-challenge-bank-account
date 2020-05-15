@@ -34,7 +34,7 @@ module Api::V1
         render json: @account, status: :ok
       else
         logger.info "not authorize"
-        render json: @account, status: :unauthorized
+        raise ExceptionHandler::AccessDenied, "Access denied"
       end
     end
 
@@ -77,8 +77,7 @@ module Api::V1
         render json: { account: account, referral_code: @referral_code,  access: { username: Crypt.decrypt(account.email), password: @password }}, status: :created
       else
         logger.info "account is invalid"
-        render json: {errors: account.errors.full_messages},
-               status: :unprocessable_entity
+        raise ExceptionHandler::RecordInvalid, account.errors.full_messages
       end
     end
 

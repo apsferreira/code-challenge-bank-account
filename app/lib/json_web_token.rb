@@ -11,9 +11,9 @@ class JsonWebToken
       decoded = JWT.decode(token, SECRET_KEY)[0]
       HashWithIndifferentAccess.new decoded
     rescue JWT::ExpiredSignature, JWT::VerificationError => e
-      raise ExceptionHandler::ExpiredSignature, e.message
+      raise ExceptionHandler::ExpiredSignature, "Access denied!. Token has expired."
     rescue JWT::DecodeError, JWT::VerificationError => e
-      raise ExceptionHandler::DecodeError, e.message
+      raise ExceptionHandler::DecodeError, "Access denied!. Invalid token supplied."
     end
   end
 
