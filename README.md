@@ -1,12 +1,12 @@
 # Bank account opening - Code Challenge
 
-[![Build Status](https://travis-ci.org/apsferreira/code-challenge-bank-account.svg?branch=master)](https://travis-ci.org/apsferreira/code-challenge-bank-account)
+<!-- [![Build Status](https://travis-ci.org/apsferreira/code-challenge-bank-account.svg?branch=master)](https://travis-ci.org/apsferreira/code-challenge-bank-account) -->
 
 Code challenge related to creating an API that supports requests for creating and editing accounts.
 
 The API documentation can be found [here](https://app.swaggerhub.com/apis-docs/WebSTIC/bank-account-opening/1.0.0#/)
 
-An example of how the API works can be recorded [here](http://api.antoniopedro.com.br/api/v1/alive)
+An example of the working API [here](http://api.antoniopedro.com.br/api/v1/alive)
 
 ## Stack
 
@@ -32,6 +32,8 @@ After cloning the repository:
 ```bash
 $ git clone git@github.com:apsferreira/code-challenge-bank-account.git
 ```
+
+Access the folder created when downloading the repository:
 
 ```bash
 $ cd code-challenge-bank-account
