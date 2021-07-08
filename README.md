@@ -103,11 +103,12 @@ For monitoring purposes, newrelic was integrated into the application, [sidekiq]
 
 #### Newrelic
 
-![Newrelic](public/imgs/newrelic.png)
+![Alt text](public/imgs/newrelic.png "Title")
 
 #### Sidekiq
 
-![Newrelic](public/imgs/sidekiq.png)
+![Newrelic](public/imgs/sidekiq.png?raw=true "teste sideki")
+
 
 
 ## Tests
